@@ -1,0 +1,243 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=DM+Sans:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif}
+.wrap{padding:1.25rem 1rem 2rem}
+.header{text-align:center;margin-bottom:1.25rem}
+.arabic{font-family:'Amiri',serif;font-size:26px;color:#1D9E75;letter-spacing:1px}
+.title{font-size:24px;font-weight:500;color:var(--color-text-primary);margin-top:4px}
+.sub{font-size:15px;color:var(--color-text-secondary);margin-top:3px}
+.clock-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.25rem}
+.clk{font-family:'Amiri',serif;font-size:34px;color:#1D9E75;letter-spacing:2px}
+.dt{font-size:15px;color:var(--color-text-secondary)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1.25rem}
+.stat{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem .5rem;text-align:center}
+.sn{font-size:24px;font-weight:500;color:#1D9E75}
+.sl{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.overall-bar{margin-bottom:1.25rem}
+.ob-top{display:flex;justify-content:space-between;font-size:14px;color:var(--color-text-secondary);margin-bottom:6px}
+.ob-track{height:10px;background:var(--color-background-secondary);border-radius:5px;overflow:hidden}
+.ob-fill{height:100%;background:#1D9E75;border-radius:5px;transition:width .4s}
+.pare-label{font-size:14px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.pare-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.pare-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;border:0.5px solid var(--color-border-tertiary)}
+.pare-cell.done{color:#fff}
+.pare-cell.todo{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.members-label{font-size:14px;font-weight:500;color:var(--color-text-secondary);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px}
+.member-list{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
+.mc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1rem;display:flex;align-items:center;gap:12px}
+.mc:hover{border-color:#5DCAA5}
+.av{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:15px;flex-shrink:0}
+.minfo{flex:1;min-width:0}
+.mname{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.mpare{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.mprog{display:flex;align-items:center;gap:8px;margin-top:7px}
+.mtrack{flex:1;height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+.mfill{height:100%;border-radius:4px;transition:width .4s}
+.mpct{font-size:13px;color:var(--color-text-secondary);min-width:32px;text-align:right}
+.mbadge{font-size:13px;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.done-badge{background:#E1F5EE;color:#085041}
+.partial-badge{background:#9FE1CB;color:#085041}
+.todo-badge{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.log-btn{padding:6px 12px;font-size:14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer;flex-shrink:0;font-weight:500}
+.log-btn:hover{border-color:#5DCAA5;color:#1D9E75}
+.khatam-banner{background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:.85rem 1rem;text-align:center;margin-bottom:1rem;display:none}
+.khatam-banner.show{display:block}
+.khatam-txt{font-family:'Amiri',serif;font-size:22px;color:#085041}
+.ornament{text-align:center;color:#1D9E75;font-size:14px;opacity:.4;letter-spacing:4px;margin-bottom:.5rem}
+.dua-box{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;background:var(--color-background-secondary);text-align:center}
+.dua-title{font-family:'Amiri',serif;font-size:20px;color:#1D9E75;margin-bottom:.85rem}
+.dua-text{font-size:16px;color:var(--color-text-secondary);line-height:2.3;direction:rtl}
+</style>
+
+<div class="wrap">
+<div class="header">
+  <div class="ornament">❖ ✦ ❖</div>
+  <div class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="title">قۇرئان خەتىم ئىزلىگۈچى</div>
+  <div class="sub">10 ئەزا · ھەر بىرى 3 پارە · جەمئى 30 پارە تاماملىنىدۇ</div>
+</div>
+
+<div class="clock-row">
+  <div class="clk" id="clk">--:--:--</div>
+  <div class="dt" id="dt"></div>
+</div>
+
+<div class="khatam-banner" id="khatamBanner">
+  <div class="khatam-txt">الحمد لله — خەتىم تاماملاندى!</div>
+  <div style="font-size:15px;color:#0F6E56;margin-top:4px">تىمىڭىز پۈتكۈل قۇرئانىكەرىمنى خەتىم قىلدى</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="sn" id="sDone">0</div><div class="sl">تاماملانغان پارە</div></div>
+  <div class="stat"><div class="sn" id="sLeft">30</div><div class="sl">قالغان پارە</div></div>
+  <div class="stat"><div class="sn" id="sPct">0%</div><div class="sl">تاماملاندى</div></div>
+  <div class="stat"><div class="sn" id="sMembers">10</div><div class="sl">ئەزالار</div></div>
+</div>
+
+<div class="overall-bar">
+  <div class="ob-top"><span>ئومۇمىي ئىلگىرىلەش</span><span id="obPct">0 / 30 پارە</span></div>
+  <div class="ob-track"><div class="ob-fill" id="obFill" style="width:0%"></div></div>
+</div>
+
+<div class="pare-label">30 پارە خەرىتىسى</div>
+<div class="pare-grid" id="pareGrid"></div>
+<br>
+
+<div class="members-label">تىم ئەزالىرى</div>
+<div class="member-list" id="memberList"></div>
+
+<div class="dua-box">
+  <div class="dua-title">— دۇئا —</div>
+  <div class="dua-text">
+    ناھايىتىمۇ شەپقەتلىك ۋە مېھرىبان ئاللاھىم!<br>
+    ئوقۇغان قۇرئانىمىزنى قوبۇل قىلغىن،<br>
+    گۇناھلىرىمىزنى مەغپىرەت قىلغىن،<br>
+    ئاتا-ئانىمىزغا، ئائىلىمىزگە ۋە بارچە مۇسۇلمانلارغا<br>
+    تىنچلىق، سالامەتلىك ۋە ھىدايەت نېسىپ قىلغىن.<br>
+    قەلبلىرىمىزنى قۇرئان نۇرى بىلەن يورۇتۇپ،<br>
+    بىزنى ئىماندا مۇستەھكەم قىلغىن.<br>
+    دۇنيادا ۋە ئاخىرەتتە ياخشىلىق ئاتا قىلغىن.
+  </div>
+</div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCCtGMGcKWb7IxZbZhRPYjL95Mm7jNGDd4",
+  authDomain: "quran-99dcd.firebaseapp.com",
+  projectId: "quran-99dcd",
+  storageBucket: "quran-99dcd.firebasestorage.app",
+  messagingSenderId: "728125256998",
+  appId: "1:728125256998:web:c43bf26c6af25bb3713de7",
+  measurementId: "G-6ESFTN2CST"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const COLORS=[
+  {bg:'#E1F5EE',txt:'#085041',fill:'#1D9E75'},
+  {bg:'#E6F1FB',txt:'#0C447C',fill:'#185FA5'},
+  {bg:'#FAEEDA',txt:'#633806',fill:'#BA7517'},
+  {bg:'#FBEAF0',txt:'#72243E',fill:'#993556'},
+  {bg:'#EAF3DE',txt:'#27500A',fill:'#3B6D11'},
+  {bg:'#FAECE7',txt:'#712B13',fill:'#993C1D'},
+  {bg:'#EEEDFE',txt:'#3C3489',fill:'#534AB7'},
+  {bg:'#FCEBEB',txt:'#791F1F',fill:'#A32D2D'},
+  {bg:'#9FE1CB',txt:'#04342C',fill:'#0F6E56'},
+  {bg:'#FAC775',txt:'#412402',fill:'#854F0B'},
+];
+const DEFAULT_MEMBERS=[
+  {name:'رۇقىيە خانىم',pare:[1,2,3]},
+  {name:'مەدىنە ھاجىم',pare:[4,5,6]},
+  {name:'ئامانگۈل ھاجىم',pare:[7,8,9]},
+  {name:'زۇلەيھا ھاجىم',pare:[10,11,12]},
+  {name:'ئارزىگۈل خانىم',pare:[13,14,15]},
+  {name:'كەرىمە خانىم',pare:[16,17,18]},
+  {name:'بۇخەلچەم خانىم',pare:[19,20,21]},
+  {name:'مەستۇرە ھاجىم',pare:[22,23,24]},
+  {name:'ئامىنە خانىم',pare:[25,26,27]},
+  {name:'ئانارگۈل خانىم',pare:[28,29,30]},
+];
+let members=DEFAULT_MEMBERS;
+let completedPare={};
+
+function initials(n){const w=n.trim().split(/\s+/);return w.map(x=>x[0]||'').join('').toUpperCase().slice(0,2)||'??';}
+function pareOwner(p){for(let i=0;i<members.length;i++){if(members[i].pare.includes(p))return i;}return -1;}
+
+function renderPareGrid(){
+  const g=document.getElementById('pareGrid');g.innerHTML='';
+  for(let p=1;p<=30;p++){
+    const done=completedPare[p];const owner=pareOwner(p);const c=owner>=0?COLORS[owner%COLORS.length]:null;
+    const cell=document.createElement('div');cell.className='pare-cell '+(done?'done':'todo');cell.textContent=p;
+    if(done&&c){cell.style.background=c.fill;cell.style.color='#fff';cell.style.borderColor=c.fill;}
+    cell.title=`${p}-پارە${owner>=0?' — '+members[owner].name:''}${done?' ✓':''}`;g.appendChild(cell);
+  }
+}
+
+function renderMembers(){
+  const list=document.getElementById('memberList');list.innerHTML='';
+  members.forEach((m,i)=>{
+    const c=COLORS[i%COLORS.length];const total=m.pare.length;
+    const done=m.pare.filter(p=>completedPare[p]).length;const pct=total?Math.round(done/total*100):0;
+    const status=done===total&&total>0?'done':done>0?'partial':'todo';
+    const badgeCls=status==='done'?'done-badge':status==='partial'?'partial-badge':'todo-badge';
+    const badgeTxt=status==='done'?'تاماملاندى':done+'/'+total+' پارە';
+    const pareList=m.pare.map(p=>p+'-پارە').join('، ');
+    const div=document.createElement('div');div.className='mc';
+    div.innerHTML=`<div class="av" style="background:${c.bg};color:${c.txt}">${initials(m.name)}</div>
+      <div class="minfo">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div class="mname">${m.name}</div><span class="mbadge ${badgeCls}">${badgeTxt}</span>
+        </div>
+        <div class="mpare">${pareList}</div>
+        <div class="mprog">
+          <div class="mtrack"><div class="mfill" style="width:${pct}%;background:${c.fill}"></div></div>
+          <span class="mpct">${pct}%</span>
+          <button class="log-btn" onclick="togglePare(${i})">📖 ئوقۇپ بولدۇم</button>
+        </div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function renderStats(){
+  const done=Object.values(completedPare).filter(Boolean).length;const left=30-done;const pct=Math.round(done/30*100);
+  document.getElementById('sDone').textContent=done;document.getElementById('sLeft').textContent=left;
+  document.getElementById('sPct').textContent=pct+'%';document.getElementById('sMembers').textContent=members.length;
+  document.getElementById('obPct').textContent=done+' / 30 پارە';document.getElementById('obFill').style.width=pct+'%';
+  document.getElementById('khatamBanner').className='khatam-banner'+(done===30?' show':'');
+}
+
+function togglePare(memberIdx){
+  const m=members[memberIdx];const allDone=m.pare.every(p=>completedPare[p]);
+  m.pare.forEach(p=>completedPare[p]=!allDone);save();render();
+}
+
+async function save(){
+  await db.collection("quran").doc("progress").set({
+    members: members,
+    completedPare: completedPare
+  });
+}
+
+function render(){renderStats();renderPareGrid();renderMembers();}
+
+const UY_DAYS=['يەكشەنبە','دۈشەنبە','سەيشەنبە','چارشەنبە','پەيشەنبە','جۈمە','شەنبە'];
+const UY_MONTHS=['يانۋار','فېۋرال','مارت','ئاپرېل','ماي','ئىيۇن','ئىيۇل','ئاۋغۇست','سېنتەبىر','ئۆكتەبىر','نويابىر','دېكابىر'];
+
+function tick(){
+  const n=new Date();const pad=x=>String(x).padStart(2,'0');
+  document.getElementById('clk').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  document.getElementById('dt').textContent=`${UY_DAYS[n.getDay()]}، ${n.getDate()} ${UY_MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+}
+
+async function init(){
+
+  const doc = await db.collection("quran").doc("progress").get();
+
+  if(doc.exists){
+    const data = doc.data();
+
+    if(data.members) members = data.members;
+    if(data.completedPare) completedPare = data.completedPare;
+  }
+
+  render();
+
+  db.collection("quran").doc("progress")
+    .onSnapshot((snapshot)=>{
+      const data = snapshot.data();
+
+      if(data){
+        members = data.members || members;
+        completedPare = data.completedPare || completedPare;
+        render();
+      }
+    });
+}
+
+tick();setInterval(tick,1000);init();
+</script>
