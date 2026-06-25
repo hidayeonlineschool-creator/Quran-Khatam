@@ -144,8 +144,6 @@ const DEFAULT_MEMBERS=[
 ];
 let members=DEFAULT_MEMBERS;
 let completedPare={};
-let members=DEFAULT_MEMBERS;
-let completedPare={};
 
 function initials(n){const w=n.trim().split(/\s+/);return w.map(x=>x[0]||'').join('').toUpperCase().slice(0,2)||'??';}
 function pareOwner(p){for(let i=0;i<members.length;i++){if(members[i].pare.includes(p))return i;}return -1;}
